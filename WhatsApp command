@@ -1,0 +1,6 @@
+const msg = $json["Body"];
+const parts = msg.trim().split(/\s+/);
+const action = parts[0]?.toUpperCase();
+const path = parts.slice(1).join(" ");
+
+return [{ json: { action, path } }];
