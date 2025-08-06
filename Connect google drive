@@ -1,0 +1,8 @@
+
+Create a Google Cloud project
+
+Enable the Google Drive API
+
+Create OAuth2 credentials
+
+Use those in n8n → Credentials → Google Drive OAuth2
