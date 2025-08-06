@@ -1,0 +1,33 @@
+// Whatsapp-Driven Google Drive Assistant – Full n8n Workflow Code Snippets
+
+// Step 1: Function Node – Parse WhatsApp Message
+// Parses commands like: LIST /ProjectX or DELETE /ProjectX/file.pdf
+const msg = $json["Body"] || "";
+const parts = msg.trim().split(/\s+/);
+const action = parts[0]?.toUpperCase();
+const path = parts.slice(1).join(" ");
+return [{ json: { action, path } }];
+
+// Step 2: Switch Node (configure UI-wise, not code)
+// Checks {{$json.action}} against: LIST, DELETE, MOVE, SUMMARY
+
+// Step 3: Move Command Function Node
+// Extracts source file and destination folder from MOVE command
+const [filePath, destFolder] = $json["path"].split(" ");
+return [{ json: { filePath, destFolder } }];
+
+// Step 4: Summary Preprocessing Function
+// After downloading file from Google Drive, convert binary to string
+const buffer = $binary.data.data;
+return [{ json: { content: buffer.toString() } }];
+
+// Step 5: Webhook Response Node (Final reply to WhatsApp)
+return [{
+  json: {
+    messages: [
+      {
+        text: `✅ Action '${$json.action}' processed successfully on '${$json.path}'`
+      }
+    ]
+  }
+}];
